@@ -13,5 +13,9 @@ post '/' do
 	extraerInformacion(txt)
 end
 
+post '/twt' do
+	'hola'
+end
+
 
 
