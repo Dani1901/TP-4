@@ -34,7 +34,7 @@ class Twitter
 		puts @@input
 	end
 
-	def tweet (input1)#Metodo para realizar el tweet, actualizando el status mediante json.
+	def tweet(input1)#Metodo para realizar el tweet, actualizando el status mediante json.
 		
 		$client.statuses.update! :status=> input1 #POST to https://twitter.com/statuses/update.json
 	end

@@ -4,6 +4,8 @@ require 'open-uri'
 require 'sinatra'
 require 'slim'
 	
+@@informacion = Array.new(10)
+	
 	def extraerInformacion(solicitud)
 
 		codigo_fuente = Nokogiri::HTML(open("http://bandcamp.com/tag/" + solicitud)) #Extraer el codigo fuente de la pagina 
@@ -26,7 +28,6 @@ require 'slim'
 			etiqueta_url = item.css("a") # Se accede a la etiqueta que contiene el enlace de la informacion del grupo y se guarda
 			url = etiqueta_url[0]["href"]
 			
-			codigo = codigo + '<p>'+'<a href="'+ url +'">VER</a> '+'</p>'
 			
 
 			etiqueta_img = item.css("img[class='art']") # Se accede a la etiqueta que contiene el enlace de la imagen del grupo y se guarda
@@ -44,33 +45,28 @@ require 'slim'
 				etiqueta_moneda = lista_precio.css("span[class='buyItemExtra secondaryText']") #Acceso a la etiqueta del tipo de moneda
 				tipo_moneda = etiqueta_moneda[0].text
 	
-				etiqueta_precio = lista_precio.css("span[class='base-text-color']")#Acceso a la etiqueta de la cantidad de dinero
+				etiqueta_precio = lista_precio.css("span[class='base-text-color']") #Acceso a la etiqueta de la cantidad de dinero
 				precio = etiqueta_precio[0].text
 
 				precio_final = precio + tipo_moneda
+				
+				pago = "Paid"
 			else
 				precio_final = "Gratuito"
+				pago = "Free"
 			end
 			
 			codigo = codigo + '<p>'+precio_final+'</p>'
-
-			codigo = codigo + '<p>'+ '<form action="/twt" method="post"><input type="submit" value="Tweet"> </form> '+'</p>'
-		
-			#puts precio_final
 			
+			codigo = codigo + '<p>'+'<a href="'+ url +'">Ver album</a> '+'</p>'
 
+			codigo = codigo + '<p>'+ '<form action="/twt'+i.to_s+'" method="post" ><input type="submit" value="Tweet"> </form> '+'</p>'
 			
+			@@informacion[i] = etiqueta_grupo+ " " + etiqueta_album + " " + pago + " URL: " + url 
 	 
 		end
 		return codigo
 	end
 
 
-	def precio(url_grupo)
-		
-	end
-
-
-
-#extraerInformacion("rock")
-
+	
